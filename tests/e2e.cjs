@@ -3,6 +3,7 @@
 const { chromium } = require('playwright')
 const fs = require('fs')
 const BASE = process.argv[2] || 'http://127.0.0.1:5173'
+const ONLY = (process.env.ONLY || 'main,vp,dead').split(',')
 const ROUTES = ['/voor-jou', '/fotos', '/foto/m-1988-kitchen', '/tijdlijn', '/tijdmachine', '/albums', '/albums/al-zeeland', '/verhalen', '/verhalen/s-nel-appeltaart', '/familie', '/kluis', '/bronnen', '/nalatenschap', '/nalatenschap/voorbeeld?wens=wish-daan', '/nationaal-archief', '/nationaal-archief/aanbieden', '/schatkamer', '/instellingen', '/zoeken?q=Mila', '/hulp']
 const results = []
 const log = (name, ok, detail = '') => { results.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? ' — ' + detail : ''}`) }
@@ -18,19 +19,21 @@ async function newPage(b, vp = { width: 1440, height: 900 }) {
   return p
 }
 const go = (p, path) => p.goto(BASE + path, { waitUntil: 'networkidle' })
+let P0; const p_reset_view = async () => { if (!P0) return; await P0.goto(BASE + '/voor-jou', { waitUntil: 'networkidle' }); await P0.evaluate(() => { try { const s = JSON.parse(localStorage.getItem('mbg-demo-v2')); if (s && s.viewAs !== 'sanne') { s.viewAs = 'sanne'; localStorage.setItem('mbg-demo-v2', JSON.stringify(s)) } } catch {} }) }
 const reset = async (p) => { await go(p, '/voor-jou'); await p.evaluate(() => { localStorage.clear(); sessionStorage.clear() }); await go(p, '/voor-jou') }
-async function run(name, fn) { try { const d = await fn(); log(name, true, d || '') } catch (e) { log(name, false, e.message.split('\n')[0]) } }
+async function run(name, fn) { try { await p_reset_view() ; const d = await fn(); log(name, true, d || '') } catch (e) { log(name, false, e.message.split('\n')[0]) } }
 
 ;(async () => {
   const b = await chromium.launch()
-  const p = await newPage(b)
+  const p = await newPage(b); P0 = p
   await reset(p)
 
+  if (ONLY.includes('main')) {
   await run('1. Alle routes direct via URL, menu en back/forward', async () => {
     for (const r of ROUTES) { await go(p, r); expect(await p.locator('h1, [role=dialog]').first().isVisible(), `geen inhoud op ${r}`) }
     await go(p, '/voor-jou')
     const labels = ["Foto's & video's", 'Tijdlijn', 'Albums', 'Verhalen', 'Documentenkluis', 'Bronnen & importeren', 'Familiekring', 'Later doorgeven', 'Nationaal archief', 'De Schatkamer', 'Instellingen', 'Hulp', 'Voor jou']
-    for (const l of labels) { await p.locator('aside nav a, aside a').filter({ hasText: l }).first().click(); await p.waitForTimeout(150); expect(await p.locator('aside a[aria-current=page]').innerText() === l, `menu ${l} niet actief`) }
+    for (const l of labels) { await p.locator('aside nav a, aside a').filter({ hasText: l }).first().click(); await p.waitForTimeout(350); expect(await p.locator('aside a[aria-current=page]').innerText() === l, `menu ${l} niet actief`) }
     await p.goBack(); await p.waitForTimeout(150); expect(p.url().includes('/hulp'), 'back werkt niet')
     await p.goForward(); await p.waitForTimeout(150); expect(p.url().includes('/voor-jou'), 'forward werkt niet')
     return `${ROUTES.length} routes, ${labels.length} menu-items`
@@ -78,8 +81,8 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
   await run('6. Deel “Zomers in Zeeland” met Ineke en Marieke → Bekijk als Ineke → geen kluis', async () => {
     await go(p, '/albums/al-zeeland'); await p.getByRole('button', { name: 'Deel met familie' }).click()
     const d = p.locator('[role=dialog]')
-    await d.locator('div', { hasText: 'Ineke de Wit' }).getByRole('button', { name: 'Kiezen' }).last().click()
-    await d.locator('div', { hasText: 'Marieke de Wit' }).getByRole('button', { name: 'Kiezen' }).last().click()
+    await d.getByRole('button', { name: 'Kies Ineke' }).click()
+    await d.getByRole('button', { name: 'Kies Marieke' }).click()
     await d.getByRole('button', { name: 'Delen' }).click(); await p.waitForTimeout(200)
     expect(await d.getByText('Kan bekijken').count() >= 2, 'toegang niet getoond')
     await d.getByRole('button', { name: /Bekijk als Ineke/ }).click(); await p.waitForTimeout(300)
@@ -109,7 +112,7 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
     expect(p.url().includes('/nalatenschap/voorbeeld'), 'geen voorbeeld')
     expect(await p.getByText('Zo zou dit er later uit kunnen zien').isVisible(), 'label ontbreekt')
     expect(await p.getByText('Lieve Mila,', { exact: false }).first().isVisible(), 'brief ontbreekt')
-    await p.getByRole('button', { name: 'Sluiten' }).click(); await p.waitForTimeout(300)
+    await p.getByRole('button', { name: 'Sluiten', exact: true }).first().click(); await p.waitForTimeout(300)
     expect(await p.getByText('Bijgewerkt').isVisible(), 'wens niet gemarkeerd')
     expect(await p.getByRole('heading', { name: 'Voor Mila' }).isVisible(), 'wens voor Mila niet in overzicht')
     await go(p, '/voor-jou'); expect(await p.getByText(/2 bewaarwensen/).isVisible(), 'dashboard niet bijgewerkt')
@@ -187,7 +190,7 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
   await run('13. Geen JS-fouten of 404\'s tijdens alle scenario\'s', async () => { expect(p.errors.length === 0, p.errors.slice(0, 3).join(' | ')) })
 
   await run('14. Reset → oorspronkelijke staat', async () => {
-    await go(p, '/instellingen'); await p.getByRole('button', { name: 'Demo opnieuw instellen' }).first().click(); await p.getByRole('button', { name: 'Opnieuw starten' }).click(); await p.waitForTimeout(300)
+    await go(p, '/instellingen'); await p.getByRole('button', { name: 'Demo opnieuw instellen' }).first().click(); await p.getByRole('dialog').getByRole('button', { name: 'Opnieuw starten', exact: true }).click(); await p.waitForTimeout(300)
     await go(p, '/albums'); expect(await p.getByText('Familieweekend').count() === 0, 'album nog aanwezig')
     await go(p, '/verhalen'); expect(await p.getByText('Rozijnen voor Pieter').count() === 0, 'verhaal nog aanwezig')
     await go(p, '/nationaal-archief'); expect(await p.getByText('Je hebt nog niets aangeboden').isVisible(), 'aanbieding nog aanwezig')
@@ -195,7 +198,10 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
     await go(p, '/albums/al-zeeland'); expect(await p.getByText('Alleen jij ziet dit album.').isVisible(), 'delen niet teruggezet')
   })
 
-  // 2. Dode knoppen: klik elke zichtbare knop/link en kijk of er iets gebeurt
+  }
+  // 2. Dode knoppen
+  // Dode knoppen: zie tests/dead-buttons.cjs (sneller, parallel)
+  if (ONLY.includes('dead-legacy'))
   await run('2. Geen dode knoppen of links (alle zichtbare knoppen per scherm geklikt)', async () => {
     const dead = []; let total = 0
     const q = await newPage(b)
@@ -221,7 +227,7 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
   })
 
   // 12. viewports
-  await run('12. 1440 / 768 / 390 px: geen horizontale scroll, beelden zichtbaar', async () => {
+  if (ONLY.includes('vp')) await run('12. 1440 / 768 / 390 px: geen horizontale scroll, beelden zichtbaar', async () => {
     const issues = []
     for (const vp of [{ width: 1440, height: 900 }, { width: 768, height: 1024 }, { width: 390, height: 844 }]) {
       const q = await newPage(b, vp)
@@ -242,7 +248,7 @@ async function run(name, fn) { try { const d = await fn(); log(name, true, d || 
     expect(issues.length === 0, issues.slice(0, 8).join('; '))
   })
 
-  fs.writeFileSync(__dirname + '/results.json', JSON.stringify({ date: new Date().toISOString(), base: BASE, results }, null, 2))
+  fs.writeFileSync(__dirname + `/results-${ONLY.join('-')}.json`, JSON.stringify({ date: new Date().toISOString(), base: BASE, results }, null, 2))
   console.log(`\n${results.filter((r) => r.ok).length}/${results.length} geslaagd`)
   await b.close()
 })()

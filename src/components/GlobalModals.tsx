@@ -256,7 +256,7 @@ export function ShareAlbumModal({ albumId }: { albumId: string }) {
                 {already ? (
                   <button className="btn-ghost btn-sm text-meta" onClick={() => { unshareAlbum(albumId, p.id); toast({ text: `${p.name} heeft geen toegang meer tot dit album` }) }}>Toegang intrekken</button>
                 ) : (
-                  <button onClick={() => setSel((x) => on ? x.filter((i) => i !== p.id) : [...x, p.id])} aria-pressed={on} className={cx('btn-sm btn', on ? 'bg-brand text-white' : 'bg-white border border-line')}>{on ? <><Check size={16} /> Gekozen</> : 'Kiezen'}</button>
+                  <button onClick={() => setSel((x) => on ? x.filter((i) => i !== p.id) : [...x, p.id])} aria-pressed={on} aria-label={`${on ? 'Gekozen' : 'Kies'} ${p.name}`} className={cx('btn-sm btn', on ? 'bg-brand text-white' : 'bg-white border border-line')}>{on ? <><Check size={16} /> Gekozen</> : 'Kiezen'}</button>
                 )}
               </div>
             )

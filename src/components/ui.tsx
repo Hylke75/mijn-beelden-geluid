@@ -89,7 +89,7 @@ export function Img({ src, alt, className, imgClassName, eager, era, grain }: { 
   const [state, setState] = useState<'loading' | 'ok' | 'err'>('loading')
   return (
     <div className={cx(className?.includes('absolute') ? '' : 'relative', 'overflow-hidden bg-sand', grain && (era === 'bw' || era === 'eighties' || era === 'nineties') && 'grain', className)}>
-      {state === 'err' ? (
+      {state === 'err' || !src ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center text-meta gap-2 p-3 text-center bg-[linear-gradient(135deg,#F1EEE7,#E9E4DA)]">
           <ImageOff size={22} /><span className="text-xs">Afbeelding niet beschikbaar</span>
         </div>
@@ -98,7 +98,7 @@ export function Img({ src, alt, className, imgClassName, eager, era, grain }: { 
           onLoad={() => setState('ok')} onError={() => setState('err')}
           className={cx('w-full h-full object-cover transition-opacity duration-300', state === 'ok' ? 'opacity-100' : 'opacity-0', imgClassName)} />
       )}
-      {state === 'loading' && <div className="absolute inset-0 bg-[linear-gradient(110deg,#F1EEE7_30%,#F8F6F1_50%,#F1EEE7_70%)] bg-[length:200%_100%] animate-[shimmer_1.4s_infinite]" aria-hidden />}
+      {state === 'loading' && src && <div className="absolute inset-0 bg-[linear-gradient(110deg,#F1EEE7_30%,#F8F6F1_50%,#F1EEE7_70%)] bg-[length:200%_100%] animate-[shimmer_1.4s_infinite]" aria-hidden />}
     </div>
   )
 }
