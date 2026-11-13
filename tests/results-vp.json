@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-13T14:07:30.813Z",
+  "base": "http://127.0.0.1:4173",
+  "results": [
+    {
+      "name": "12. 1440 / 768 / 390 px: geen horizontale scroll, beelden zichtbaar",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}

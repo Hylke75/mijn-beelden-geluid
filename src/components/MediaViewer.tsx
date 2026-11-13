@@ -19,9 +19,13 @@ export function MediaViewer() {
   const m = state.media.find((x) => x.id === id)
   const list = useMemo(() => { const l = getViewerList(); return l.includes(id ?? '') ? l : state.media.map((x) => x.id) }, [id, state.media])
   const idx = list.indexOf(id ?? '')
+  // Lees de actuele positie uit de URL op het moment van de actie (voorkomt verouderde waarden bij snelle toetsaanslagen)
   const go = (d: number) => {
-    const n = list[(idx + d + list.length) % list.length]
-    const next = new URLSearchParams(params); next.set('m', n); setParams(next, { replace: true })
+    const cur = new URLSearchParams(window.location.search)
+    const curId = cur.get('m') ?? id ?? ''
+    const l = (() => { const v = getViewerList(); return v.includes(curId) ? v : state.media.map((x) => x.id) })()
+    const i = l.indexOf(curId)
+    cur.set('m', l[(i + d + l.length) % l.length]); setParams(cur, { replace: true })
   }
   const close = () => { const next = new URLSearchParams(params); next.delete('m'); setParams(next) }
 

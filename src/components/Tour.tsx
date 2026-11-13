@@ -121,7 +121,7 @@ export function WelcomePanel() {
   const [params] = useSearchParams()
   if (state.welcomeDismissed || ui.tourStep != null || loc.pathname !== '/voor-jou' || params.get('presenter') || ui.modal) return null
   return (
-    <div className="fixed z-[70] left-3 right-3 bottom-[76px] lg:left-auto lg:right-6 lg:bottom-6 lg:w-[380px] card shadow-modal p-5 animate-rise" role="region" aria-label="Welkom">
+    <div className="fixed z-[35] left-3 right-3 bottom-[76px] lg:left-auto lg:right-6 lg:bottom-6 lg:w-[380px] card shadow-modal p-5 animate-rise" role="region" aria-label="Welkom">
       <button onClick={dismissWelcome} className="absolute top-3 right-3 h-8 w-8 rounded-full hover:bg-ink/5 flex items-center justify-center text-meta" aria-label="Welkomstbericht sluiten"><X size={16} /></button>
       <div className="text-xs font-semibold text-magenta mb-1">Welkom in de demo</div>
       <h2 className="font-display text-lg font-bold leading-snug pr-6">Je kijkt mee in het familiearchief van Sanne</h2>

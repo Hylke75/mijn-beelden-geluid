@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-13T13:58:07.550Z",
-  "base": "http://127.0.0.1:5173",
+  "date": "2026-11-13T14:05:05.980Z",
+  "base": "http://127.0.0.1:4173",
   "results": [
     {
       "name": "1. Alle routes direct via URL, menu en back/forward",
@@ -44,8 +44,8 @@
     },
     {
       "name": "9. Nationaal-archiefwizard met verplichte toestemming → status, origineel privé",
-      "ok": false,
-      "detail": "origineel niet privé"
+      "ok": true,
+      "detail": ""
     },
     {
       "name": "9b. Schatkamer-fragment koppelen aan verhaal",
@@ -80,7 +80,22 @@
     {
       "name": "11. Toetsenbord: lichtbak pijltjes/Esc, modal Esc, focus zichtbaar",
       "ok": false,
-      "detail": "pijltje rechts werkt niet"
+      "detail": "pijltje links werkt niet"
+    },
+    {
+      "name": "15. Herinnering afspelen (Memories) en bewaren als album",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "16. Vraag aan de familie → antwoord wordt verhaal",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "17. Voortgang “Ontdek de mogelijkheden” telt ontdekte hoogtepunten",
+      "ok": true,
+      "detail": "5 van 5"
     },
     {
       "name": "13. Geen JS-fouten of 404's tijdens alle scenario's",
