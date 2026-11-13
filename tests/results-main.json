@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-13T14:05:05.980Z",
+  "date": "2026-11-13T14:09:24.581Z",
   "base": "http://127.0.0.1:4173",
   "results": [
     {
@@ -79,8 +79,8 @@
     },
     {
       "name": "11. Toetsenbord: lichtbak pijltjes/Esc, modal Esc, focus zichtbaar",
-      "ok": false,
-      "detail": "pijltje links werkt niet"
+      "ok": true,
+      "detail": ""
     },
     {
       "name": "15. Herinnering afspelen (Memories) en bewaren als album",

@@ -64,9 +64,10 @@ Types: `src/data/types.ts` (`DemoPerson`, `DemoMedia`, `DemoAlbum`, `DemoStory`,
 ## Testen
 ```bash
 npm run dev
-node tests/e2e.cjs                   # gebruikt de vooraf geïnstalleerde Playwright
+ONLY=main node tests/e2e.cjs        # scenario's (ook: ONLY=vp voor 1440/768/390 px)
+node tests/dead-buttons.cjs         # klikt elke zichtbare knop
 ```
-Uitslag in `tests/results.json`; verslag in `DEMO_TEST_REPORT.md` en `WOW_SCORECARD.md`.
+Uitslag in `tests/results-*.json`; dode-knoppencheck: `node tests/dead-buttons.cjs`. Verslag in `DEMO_TEST_REPORT.md` en `WOW_SCORECARD.md`.
 
 ## Beperkingen (bewust)
 - Geen backend, inlog, uploads, betalingen, e-mail, versleuteling of echte koppelingen. Alles wat zo lijkt, is gelabeld als *demo*, *voorbeeld* of *concept*.
