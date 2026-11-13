@@ -11,6 +11,7 @@ import { useUI } from '../demo/ui'
 import { cx } from '../lib/format'
 import { personName } from '../lib/selectors'
 import { SearchBox } from './SearchBox'
+import { AutoPlayButton } from './AutoPlay'
 
 export const NAV = [
   { group: 'Ontdekken', items: [
@@ -280,6 +281,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
           <div className="xl:hidden border-t border-line/60 px-4 sm:px-8 py-1.5 flex items-center gap-2 overflow-x-auto scrollbar-none">
             <DemoIndicator />
+            <AutoPlayButton compact className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-ink text-white text-[12px] font-semibold whitespace-nowrap" />
             <button onClick={() => ui.open({ type: 'wow' })} className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-white border border-line text-[12px] font-semibold text-ink whitespace-nowrap"><Compass size={13} /> Ontdek de mogelijkheden</button>
             <button onClick={() => ui.open({ type: 'tourIntro' })} className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-white border border-line text-[12px] font-semibold text-ink whitespace-nowrap"><PlayCircle size={13} /> Rondleiding</button>
           </div>

@@ -10,6 +10,7 @@ import { Avatar, Checkbox, DemoNote, Img, Modal } from './ui'
 import { Waveform } from './Media'
 import { cx, fmtDate } from '../lib/format'
 import { TOUR } from './Tour'
+import { AutoPlayButton } from './AutoPlay'
 
 function PhotoPicker({ selected, onToggle, max, filter }: { selected: string[]; onToggle: (id: string) => void; max?: number; filter?: string }) {
   const { state } = useDemo()
@@ -394,8 +395,8 @@ function WowModal() {
           </li>) })}
       </ul>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-paper p-4">
-        <span className="text-[15px]"><strong>Liever begeleid?</strong> Een rondleiding in 8 stappen van ongeveer 8 minuten.</span>
-        <button className="btn-primary btn-sm" onClick={() => ui.open({ type: 'tourIntro' })}>Geef me een rondleiding</button>
+        <span className="text-[15px]"><strong>Liever achterover leunen?</strong> Bekijk alles automatisch in anderhalve minuut, of volg de rondleiding in 8 stappen.</span>
+        <span className="flex gap-2"><AutoPlayButton className="btn btn-sm bg-ink text-white hover:bg-ink-soft" /><button className="btn-primary btn-sm" onClick={() => ui.open({ type: 'tourIntro' })}>Geef me een rondleiding</button></span>
       </div>
     </Modal>
   )

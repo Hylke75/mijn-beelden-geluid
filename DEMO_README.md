@@ -11,7 +11,8 @@ npm run preview    # bekijk de build
 ```
 Presentator-modus: open `http://localhost:5173/voor-jou?presenter=1` (uitzetten met `?presenter=0`).
 
-## Drie manieren om de demo te gebruiken
+## Vier manieren om de demo te gebruiken
+0. **Speel de demo af** — de knop naast de titel op *Voor jou* (en in welkomstpaneel, hoogtepuntenvenster, Hulp en presentatorpaneel) speelt de hele demo automatisch af in ±1,5 minuut: 13 scènes met ondertitel, pauze/vorige/volgende/stoppen (spatie = pauze, Esc = stoppen). Er wordt niets aan de demo-gegevens veranderd.
 1. **Zelf ontdekken** (standaard) — je landt in het archief van Sanne. De knop *Ontdek de mogelijkheden* toont vijf WOW-ervaringen van 1–2 minuten.
 2. **Rondleiding** — *Geef me een rondleiding*: 8 stappen met spotlight, wisselt zelf van scherm (entree → foto terugvinden → verhaal → tijdmachine → delen → kluis & import → later doorgeven → bijdragen aan Nederland).
 3. **Presentator-modus** — `?presenter=1` toont een klein zwevend paneel met snelkoppelingen en *Reset demo*.

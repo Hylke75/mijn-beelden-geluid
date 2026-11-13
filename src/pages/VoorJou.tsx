@@ -7,6 +7,7 @@ import { useOpenMedia } from '../components/Media'
 import { fmtDate, plural } from '../lib/format'
 import { MemoryRow } from '../components/Memories'
 import { AskFamilyCard } from '../components/AskFamily'
+import { AutoPlayButton } from '../components/AutoPlay'
 
 function greeting() {
   const h = new Date().getHours()
@@ -47,6 +48,7 @@ export default function VoorJou() {
             <h1 className="font-display text-[34px] sm:text-[46px] font-bold leading-[1.02] tracking-[-0.025em] text-ink mt-1 max-w-[17ch] sm:max-w-none">Een leven vol verhalen. <span className="text-brand">Allemaal bij elkaar.</span></h1>
           </div>
           <div className="hidden xl:flex gap-2">
+            <AutoPlayButton />
             <button className="btn-secondary" onClick={() => ui.open({ type: 'wow' })}><Sparkles size={18} className="text-magenta" /> Ontdek de mogelijkheden</button>
             <button className="btn-secondary" onClick={() => ui.open({ type: 'tourIntro' })}><PlayCircle size={18} /> Geef me een rondleiding</button>
           </div>
@@ -87,6 +89,7 @@ export default function VoorJou() {
           </div>
         </div>
         <div className="xl:hidden flex flex-wrap gap-2 mt-4">
+          <AutoPlayButton className="btn btn-sm bg-ink text-white hover:bg-ink-soft" />
           <button className="btn-secondary btn-sm" onClick={() => ui.open({ type: 'wow' })}><Sparkles size={16} className="text-magenta" /> Ontdek de mogelijkheden</button>
           <button className="btn-secondary btn-sm" onClick={() => ui.open({ type: 'tourIntro' })}><PlayCircle size={16} /> Geef me een rondleiding</button>
         </div>

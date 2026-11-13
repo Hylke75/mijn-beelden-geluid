@@ -22,6 +22,8 @@ interface UI {
   close: () => void
   tourStep: number | null
   setTourStep: (n: number | null) => void
+  autoplay: boolean
+  setAutoplay: (v: boolean) => void
 }
 const UICtx = createContext<UI | null>(null)
 
@@ -34,9 +36,10 @@ export function UIProvider({ children }: { children: ReactNode }) {
     setTourStepRaw(n)
     try { if (n == null) sessionStorage.removeItem('mbg-tour-step'); else sessionStorage.setItem('mbg-tour-step', String(n)) } catch { /* */ }
   }, [])
+  const [autoplay, setAutoplay] = useState(false)
   const open = useCallback((m: ModalSpec) => setModal(m), [])
   const close = useCallback(() => setModal(null), [])
-  const v = useMemo(() => ({ modal, open, close, tourStep, setTourStep }), [modal, open, close, tourStep, setTourStep])
+  const v = useMemo(() => ({ modal, open, close, tourStep, setTourStep, autoplay, setAutoplay }), [modal, open, close, tourStep, setTourStep, autoplay])
   return <UICtx.Provider value={v}>{children}</UICtx.Provider>
 }
 export function useUI() {

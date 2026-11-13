@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-13T14:27:19.174Z",
+  "date": "2026-11-13T14:42:56.797Z",
   "base": "http://127.0.0.1:4173",
   "results": [
     {
@@ -96,6 +96,11 @@
       "name": "17. Voortgang “Ontdek de mogelijkheden” telt ontdekte hoogtepunten",
       "ok": true,
       "detail": "5 van 5"
+    },
+    {
+      "name": "18. Automatische demo: afspelen, door scènes springen, stoppen zonder state te wijzigen",
+      "ok": true,
+      "detail": "/voor-jou → /fotos → /foto/m-1988-kitchen → /tijdmachine → /albums/al-zeeland → /familie → /kluis → /nalatenschap → /nalatenschap/voorbeeld → /nationaal-archief"
     },
     {
       "name": "13. Geen JS-fouten of 404's tijdens alle scenario's",

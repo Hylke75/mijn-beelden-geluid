@@ -211,6 +211,20 @@ async function run(name, fn) { try { await p_reset_view() ; const d = await fn()
     expect(n >= 4, `slechts ${n} van 5 gemarkeerd`); await p.keyboard.press('Escape'); return `${n} van 5`
   })
 
+  await run('18. Automatische demo: afspelen, door scènes springen, stoppen zonder state te wijzigen', async () => {
+    const before = await p.evaluate(() => localStorage.getItem('mbg-demo-v2'))
+    await go(p, '/voor-jou'); await p.getByRole('button', { name: 'Speel de demo af' }).first().click(); await p.waitForTimeout(800)
+    const panel = p.getByRole('region', { name: 'Automatische demo' }); expect(await panel.isVisible(), 'paneel ontbreekt')
+    const seen = []
+    for (let i = 0; i < 12; i++) { await panel.getByRole('button', { name: 'Volgende scène' }).click(); await p.waitForTimeout(700); seen.push(new URL(p.url()).pathname) }
+    await p.waitForTimeout(9500); expect(await panel.getByText('Einde').isVisible(), 'geen eindscherm')
+    await panel.getByRole('button', { name: 'Zelf verder kijken' }).click(); await p.waitForTimeout(300)
+    expect(await p.getByRole('region', { name: 'Automatische demo' }).count() === 0, 'paneel blijft staan')
+    const after = await p.evaluate(() => localStorage.getItem('mbg-demo-v2'))
+    expect(JSON.parse(before).albums.length === JSON.parse(after).albums.length && JSON.parse(before).stories.length === JSON.parse(after).stories.length, 'demo-state gewijzigd')
+    return [...new Set(seen)].join(' → ')
+  })
+
   await run('13. Geen JS-fouten of 404\'s tijdens alle scenario\'s', async () => { expect(p.errors.length === 0, p.errors.slice(0, 3).join(' | ')) })
 
   await run('14. Reset → oorspronkelijke staat', async () => {

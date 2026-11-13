@@ -8,6 +8,7 @@ import { SearchBox } from '../components/SearchBox'
 import { useOpenMedia } from '../components/Media'
 import { searchAll, SUGGESTIONS } from '../lib/search'
 import { cx } from '../lib/format'
+import { AutoPlayButton } from '../components/AutoPlay'
 
 const SECTIONS = [
   { id: 'profiel', l: 'Profiel', i: UserRound }, { id: 'weergave', l: 'Weergave', i: Accessibility }, { id: 'privacy', l: 'Privacy', i: ShieldCheck },
@@ -142,6 +143,7 @@ export function Hulp() {
   return (
     <div className="max-w-3xl">
       <PageHeader eyebrow="Hulp" title="Hoe kunnen we helpen?" sub="Antwoorden op veelgestelde vragen over het concept en deze demo." />
+      <div className="card p-5 mb-3 flex flex-wrap items-center gap-4 bg-ink text-white border-ink"><div className="flex-1 min-w-[200px]"><div className="font-semibold">Alles automatisch zien</div><div className="text-sm text-white/70">De demo speelt zichzelf af in ongeveer anderhalve minuut</div></div><AutoPlayButton className="btn-white btn-sm h-10" /></div>
       <div className="grid sm:grid-cols-3 gap-3 mb-8">
         <button onClick={() => ui.open({ type: 'tourIntro' })} className="card p-5 text-left hover:shadow-lift"><ArrowRight className="text-brand" /><div className="font-semibold mt-2">Rondleiding</div><div className="text-sm text-meta">8 stappen, ±8 minuten</div></button>
         <button onClick={() => ui.open({ type: 'wow' })} className="card p-5 text-left hover:shadow-lift"><ArrowRight className="text-magenta" /><div className="font-semibold mt-2">Ontdek de mogelijkheden</div><div className="text-sm text-meta">Vijf korte ervaringen</div></button>

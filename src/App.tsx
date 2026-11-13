@@ -5,6 +5,7 @@ import { MediaViewer } from './components/MediaViewer'
 import { GlobalModals } from './components/GlobalModals'
 import { Toasts } from './components/Toasts'
 import { TourPanel, PresenterPanel, WelcomePanel } from './components/Tour'
+import { AutoPlayer } from './components/AutoPlay'
 import { useDemo } from './demo/store'
 import VoorJou from './pages/VoorJou'
 import Fotos from './pages/Fotos'
@@ -74,6 +75,7 @@ export default function App() {
       <TourPanel />
       <PresenterPanel />
       <WelcomePanel />
+      <AutoPlayer />
       <Toasts />
     </>
   )
