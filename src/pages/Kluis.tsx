@@ -86,7 +86,7 @@ export default function Kluis() {
       )}
 
       <Drawer open={!!d} onClose={() => setOpenId(null)} title={d?.title ?? ''}
-        footer={d && <><button className="btn-primary flex-1" onClick={() => setMode('view')}><Eye size={17} /> Bekijken</button><button className="btn-secondary" onClick={() => setMode('edit')}><Pencil size={17} /> <span className="hidden sm:inline">Informatie aanpassen</span></button><button className="btn-secondary" onClick={() => setMode('access')}><KeyRound size={17} /> <span className="hidden sm:inline">Toegang regelen</span></button></>}>
+        footer={d && <><button className="btn-primary flex-1" onClick={() => setMode('view')}><Eye size={17} /> Bekijken</button><button className="btn-secondary" aria-label="Informatie aanpassen" onClick={() => setMode('edit')}><Pencil size={17} /> <span className="hidden sm:inline">Informatie aanpassen</span></button><button className="btn-secondary" aria-label="Toegang regelen" onClick={() => setMode('access')}><KeyRound size={17} /> <span className="hidden sm:inline">Toegang regelen</span></button></>}>
         {d && (
           <div>
             <div className="max-w-[220px] mx-auto"><DocThumb d={d} /></div>

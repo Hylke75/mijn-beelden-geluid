@@ -32,7 +32,21 @@ export default function Familie() {
       <PageHeader eyebrow="Samen & later" title="Familiekring" sub="Wie hoort bij jouw archief, en wie mag wat zien. Iedereen houdt controle over de eigen bestanden."
         actions={<button className="btn-primary" onClick={() => ui.open({ type: 'invite' })}><UserPlus size={18} /> Uitnodigen</button>} />
 
-      <section className="card p-6 sm:p-10 mb-8 overflow-x-auto" aria-label="Stamboom">
+      <section className="sm:hidden card p-4 mb-8" aria-label="Familie per generatie">
+        {[
+          { g: 'Grootouders', ids: ['nel'] },
+          { g: 'Ouders', ids: ['pieter', 'ineke'] },
+          { g: 'Jij, partner en zus', ids: ['sanne', 'thomas', 'marieke'] },
+          { g: 'Kinderen', ids: ['mila', 'daan'] },
+        ].map((row, k) => (
+          <div key={row.g} className={cx('py-3', k > 0 && 'border-t border-line')}>
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-meta mb-2">{row.g}</div>
+            <div className="flex gap-1">{row.ids.map((id) => <PersonNode key={id} p={P(id)} me={id === 'sanne'} />)}</div>
+          </div>
+        ))}
+      </section>
+
+      <section className="hidden sm:block card p-6 sm:p-10 mb-8 overflow-x-auto" aria-label="Stamboom">
         <div className="min-w-[560px] flex flex-col items-center gap-2">
           <PersonNode p={P('nel')} />
           <div className="h-6 w-px bg-line" />

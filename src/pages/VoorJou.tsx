@@ -61,7 +61,7 @@ export default function VoorJou() {
             <div className="absolute left-0 right-0 bottom-0 p-6 sm:p-8 flex flex-wrap items-end justify-between gap-4">
               <div className="text-white">
                 <div className="text-sm font-semibold text-white/80 mb-1 flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-magenta" /> Uitgelichte herinnering</div>
-                <div className="font-display text-[28px] sm:text-[36px] font-bold leading-tight">Zomer in Zeeland · 2024</div>
+                <div className="font-display text-[28px] sm:text-[36px] font-bold leading-tight">Zomer in Zeeland <span className="whitespace-nowrap">· 2024</span></div>
                 <div className="text-white/85 mt-1 flex items-center gap-2"><AvatarStack people={hero.peopleIds.map((id) => state.people.find((p) => p.id === id))} size={26} /> Ineke, Sanne en Mila op het duinpad bij Domburg</div>
               </div>
               <button className="btn-white" onClick={() => navigate(`/foto/${hero.id}`)}>Bekijk herinnering <ArrowRight size={18} /></button>

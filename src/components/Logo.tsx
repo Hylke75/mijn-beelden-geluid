@@ -12,13 +12,13 @@ export function LogoMark({ size = 32, light }: { size?: number; light?: boolean 
   )
 }
 
-export function Logo({ light }: { light?: boolean }) {
+export function Logo({ light, compact }: { light?: boolean; compact?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
-      <LogoMark size={22} light={light} />
-      <span className={`leading-[1.05] font-display ${light ? 'text-white' : 'text-ink'}`}>
-        <span className="block text-[11px] font-semibold tracking-wide opacity-70">Mijn</span>
-        <span className="block text-[16px] font-bold -mt-0.5">Beeld &amp; Geluid</span>
+      <LogoMark size={compact ? 18 : 22} light={light} />
+      <span className={`leading-[1.05] font-display whitespace-nowrap ${light ? 'text-white' : 'text-ink'}`}>
+        <span className={`block font-semibold tracking-wide opacity-70 ${compact ? 'text-[10px]' : 'text-[11px]'}`}>Mijn</span>
+        <span className={`block font-bold -mt-0.5 ${compact ? 'text-[14px]' : 'text-[16px]'}`}>Beeld &amp; Geluid</span>
       </span>
     </span>
   )

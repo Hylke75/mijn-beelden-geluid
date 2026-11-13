@@ -66,7 +66,7 @@ export default function Fotos() {
           <div className="ml-auto shrink-0 flex items-center gap-2 pl-2">
             <ArrowDownUp size={16} className="text-meta" />
             <label htmlFor="sort" className="sr-only">Sorteren</label>
-            <select id="sort" value={sort} onChange={(e) => set('sort', e.target.value === 'nieuw' ? '' : e.target.value)} className="h-9 rounded-full border border-line bg-white px-3 text-sm font-medium">
+            <select id="sort" value={sort} onChange={(e) => set('sort', e.target.value === 'nieuw' ? '' : e.target.value)} className="h-9 rounded-full border border-line bg-white px-3 text-base sm:text-sm font-medium">
               <option value="nieuw">Nieuwste eerst</option><option value="oud">Oudste eerst</option><option value="toegevoegd">Laatst toegevoegd</option>
             </select>
           </div>

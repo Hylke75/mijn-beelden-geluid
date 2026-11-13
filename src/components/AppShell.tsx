@@ -88,7 +88,7 @@ function Popover({ open, onClose, children, className }: { open: boolean; onClos
   return <div ref={ref} className={cx('absolute right-0 top-full mt-2 z-50 card shadow-lift animate-rise', className)}>{children}</div>
 }
 
-function AddButton() {
+function AddButton({ fab }: { fab?: boolean }) {
   const [open, setOpen] = useState(false)
   const ui = useUI()
   const items = [
@@ -99,10 +99,16 @@ function AddButton() {
   ]
   return (
     <div className="relative">
-      <button className="btn-magenta h-10 px-3.5 sm:px-4" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-haspopup="menu" data-tour="add">
-        <Plus size={19} strokeWidth={2.4} /><span className="hidden sm:inline">Toevoegen</span>
-      </button>
-      <Popover open={open} onClose={() => setOpen(false)} className="w-[340px] p-2">
+      {fab ? (
+        <button className="h-14 w-14 rounded-full bg-magenta text-white shadow-lift flex items-center justify-center active:scale-95 transition-transform" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-haspopup="menu" aria-label="Toevoegen">
+          <Plus size={26} strokeWidth={2.4} className={cx('transition-transform duration-200', open && 'rotate-45')} />
+        </button>
+      ) : (
+        <button className="btn-magenta h-10 px-3.5 sm:px-4" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-haspopup="menu" data-tour="add">
+          <Plus size={19} strokeWidth={2.4} /><span className="hidden sm:inline">Toevoegen</span>
+        </button>
+      )}
+      <Popover open={open} onClose={() => setOpen(false)} className={fab ? 'w-[min(340px,calc(100vw-24px))] p-2 !top-auto bottom-full mb-3 !mt-0' : 'w-[340px] p-2'}>
         <div role="menu">
           {items.map((i) => (
             <button key={i.label} role="menuitem" onClick={() => { setOpen(false); i.run() }} className="w-full flex items-start gap-3 p-3 rounded-xl hover:bg-paper text-left">
@@ -268,13 +274,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         <ViewAsBanner />
         <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur-md border-b border-line/70">
           <div className="max-w-content mx-auto h-[64px] lg:h-[72px] px-4 sm:px-8 flex items-center gap-3">
-            <button className="lg:hidden btn-ghost h-10 w-10 p-0 -ml-2 rounded-full" onClick={() => setMore(true)} aria-label="Menu openen"><Menu size={22} /></button>
-            <Link to="/voor-jou" className="lg:hidden mr-auto" aria-label="Naar Voor jou"><Logo /></Link>
+            <button className="lg:hidden btn-ghost h-11 w-11 p-0 -ml-2.5 rounded-full shrink-0" onClick={() => setMore(true)} aria-label="Menu openen"><Menu size={22} /></button>
+            <Link to="/voor-jou" className="lg:hidden mr-auto min-w-0" aria-label="Naar Voor jou"><Logo compact /></Link>
             <div className="hidden md:block flex-1 max-w-[560px]" data-tour="search"><SearchBox /></div>
             <div className="hidden xl:block ml-2"><DemoIndicator /></div>
-            <div className="flex items-center gap-1.5 sm:gap-2 ml-auto">
+            <div className="flex items-center gap-1 sm:gap-2 ml-auto shrink-0">
               <Link to="/zoeken" className="md:hidden btn-ghost h-10 w-10 p-0 rounded-full" aria-label="Zoeken"><Search size={20} /></Link>
-              <AddButton />
+              <div className="hidden sm:block"><AddButton /></div>
               <Notifications />
               <ProfileMenu />
             </div>
@@ -286,10 +292,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             <button onClick={() => ui.open({ type: 'tourIntro' })} className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-full bg-white border border-line text-[12px] font-semibold text-ink whitespace-nowrap"><PlayCircle size={13} /> Rondleiding</button>
           </div>
         </header>
-        <main id="main" ref={mainRef} className="max-w-content mx-auto px-4 sm:px-8 pt-6 sm:pt-8 pb-28 lg:pb-16 outline-none" tabIndex={-1}>
+        <main id="main" ref={mainRef} className="max-w-content mx-auto px-4 sm:px-8 pt-6 sm:pt-8 pb-12 lg:pb-16 outline-none" tabIndex={-1}>
           {children}
         </main>
-        <footer className="max-w-content mx-auto px-4 sm:px-8 pb-28 lg:pb-10 text-sm text-meta flex flex-wrap gap-x-6 gap-y-2">
+        <footer className="max-w-content mx-auto px-4 sm:px-8 pb-28 lg:pb-10 text-sm text-meta flex flex-wrap gap-x-6 gap-y-0 sm:gap-y-2 [&>a]:py-2 [&>button]:py-2 sm:[&>a]:py-0 sm:[&>button]:py-0">
           <span>Mijn Beeld &amp; Geluid · conceptdemo</span>
           <button className="hover:text-ink underline-offset-4 hover:underline" onClick={() => ui.open({ type: 'about' })}>Over deze demo</button>
           <Link to="/hulp" className="hover:text-ink underline-offset-4 hover:underline">Hulp</Link>
@@ -298,6 +304,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </footer>
       </div>
       <BottomNav onMore={() => setMore(true)} />
+      {!ui.autoplay && ui.tourStep == null && <div className="sm:hidden fixed right-4 bottom-[calc(80px+env(safe-area-inset-bottom))] z-40"><AddButton fab /></div>}
     </div>
   )
 }

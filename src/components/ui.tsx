@@ -47,7 +47,7 @@ export function Modal({ open, onClose, title, subtitle, children, footer, size =
     <div className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center sm:p-6" role="presentation">
       <div className="absolute inset-0 bg-ink/45 backdrop-blur-[2px] animate-fadeIn" onClick={onClose} />
       <div ref={ref} role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1}
-        className={cx('relative w-full bg-white sm:rounded-3xl rounded-t-3xl shadow-modal animate-pop flex flex-col max-h-[92vh] outline-none', w)}>
+        className={cx('relative w-full bg-white sm:rounded-3xl rounded-t-3xl shadow-modal animate-pop flex flex-col max-h-[92dvh] outline-none pb-[env(safe-area-inset-bottom)] sm:pb-0', w)}>
         <div className="flex items-start gap-3 px-6 pt-6 pb-4">
           {icon && <div className="mt-0.5 shrink-0">{icon}</div>}
           <div className="flex-1 min-w-0">
@@ -72,7 +72,7 @@ export function Drawer({ open, onClose, title, children, footer }: { open: boole
     <div className="fixed inset-0 z-[80]" role="presentation">
       <div className="absolute inset-0 bg-ink/40 animate-fadeIn" onClick={onClose} />
       <div ref={ref} role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1}
-        className="absolute right-0 top-0 h-full w-full max-w-[520px] bg-white shadow-modal animate-slideIn flex flex-col outline-none">
+        className="absolute right-0 top-0 h-[100dvh] w-full max-w-[520px] bg-white shadow-modal animate-slideIn flex flex-col outline-none pb-[env(safe-area-inset-bottom)]">
         <div className="flex items-center gap-3 px-6 h-16 border-b border-line shrink-0">
           <h2 id={id} className="font-display text-lg font-bold flex-1 truncate">{title}</h2>
           <button onClick={onClose} className="btn-ghost h-10 w-10 p-0 rounded-full" aria-label="Sluiten"><X size={20} /></button>
@@ -173,7 +173,7 @@ export function Toggle({ checked, onChange, label, description }: { checked: boo
         {description && <p className="text-meta text-sm mt-0.5">{description}</p>}
       </div>
       <button id={id} role="switch" aria-checked={checked} onClick={() => onChange(!checked)}
-        className={cx('relative h-7 w-12 rounded-full transition-colors duration-200 shrink-0', checked ? 'bg-brand' : 'bg-[#CBD2DD]')}>
+        className={cx('relative h-7 w-12 rounded-full transition-colors duration-200 shrink-0 after:absolute after:-inset-2.5 after:content-[\'\']', checked ? 'bg-brand' : 'bg-[#CBD2DD]')}>
         <span className={cx('absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200', checked && 'translate-x-5')} />
       </button>
     </div>

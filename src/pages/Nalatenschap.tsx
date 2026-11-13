@@ -191,7 +191,7 @@ export function LegacyPreview() {
   const photos = w.mediaIds.map((id) => state.media.find((m) => m.id === id)).filter(Boolean)
   const close = () => navigate(`/nalatenschap?nieuw=${w.id}`)
   return (
-    <div className="fixed inset-0 z-[78] bg-[#F6F1E8] overflow-y-auto" role="dialog" aria-modal="true" aria-label={`Voorbeeld voor ${p?.name}`}>
+    <div className="fixed inset-0 h-[100dvh] z-[78] bg-[#F6F1E8] overflow-y-auto overscroll-contain" role="dialog" aria-modal="true" aria-label={`Voorbeeld voor ${p?.name}`}>
       <div className="sticky top-0 z-10 bg-[#F6F1E8]/90 backdrop-blur border-b border-[#E7DDCB]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center gap-3">
           <span className="pill bg-[#FFF3D6] text-[#6B4A00] h-7"><Info size={12} /> Zo zou dit er later uit kunnen zien</span>

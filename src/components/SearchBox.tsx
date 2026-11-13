@@ -51,7 +51,7 @@ export function SearchBox({ autoFocus, big }: { autoFocus?: boolean; big?: boole
           }}
           placeholder="Zoek op personen, plaatsen, jaren of herinneringen"
           role="combobox" aria-expanded={open} aria-controls="search-pop" aria-autocomplete="list"
-          className={cx('w-full rounded-xl bg-white border border-line pl-11 pr-10 text-[15px] placeholder:text-meta/80 focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition', big ? 'h-14 text-[17px]' : 'h-11')} />
+          className={cx('w-full rounded-xl bg-white border border-line pl-11 pr-10 text-base sm:text-[15px] placeholder:text-meta/80 focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition', big ? 'h-14 text-[17px]' : 'h-11')} />
         {q && <button type="button" onClick={() => { setQ(''); setOpen(true) }} className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full hover:bg-ink/5 flex items-center justify-center text-meta" aria-label="Zoekveld leegmaken"><X size={16} /></button>}
       </form>
       {open && (

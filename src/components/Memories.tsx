@@ -5,6 +5,7 @@ import { X, Pause, Play, ChevronLeft, ChevronRight, FolderPlus, Users, BookImage
 import { useDemo } from '../demo/store'
 import { useUI } from '../demo/ui'
 import { cx } from '../lib/format'
+import { useSwipe } from '../lib/useSwipe'
 
 export interface MemoryReel {
   id: string
@@ -117,9 +118,10 @@ export function MemoryPlayer({ reel, onClose }: { reel: MemoryReel; onClose: () 
   }, [next, prev, onClose])
   useEffect(() => { reel.slides.forEach((s) => { const m = state.media.find((x) => x.id === s.mediaId); if (m) { const im = new Image(); im.src = m.src } }) }, [reel, state.media])
 
+  const swipe = useSwipe(next, prev, { onDown: onClose })
   const album = state.albums.find((a) => a.id === reel.albumId)
   return createPortal(
-    <div className="fixed inset-0 z-[90] bg-black text-white dark-surface animate-fadeIn" role="dialog" aria-modal="true" aria-label={`Herinnering: ${reel.title}`}>
+    <div {...swipe} className="fixed inset-0 h-[100dvh] z-[90] bg-black text-white dark-surface animate-fadeIn touch-pan-y" role="dialog" aria-modal="true" aria-label={`Herinnering: ${reel.title}`}>
       {reel.slides.map((s, k) => { const m = state.media.find((x) => x.id === s.mediaId); return m ? (
         <div key={s.mediaId} aria-hidden={k !== i} className={cx('absolute inset-0 transition-opacity duration-700', k === i && !end ? 'opacity-100' : 'opacity-0')}>
           <img src={m.src} alt="" className="absolute inset-0 w-full h-full object-cover blur-2xl scale-110 opacity-50" />

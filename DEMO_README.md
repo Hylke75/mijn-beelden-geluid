@@ -67,8 +67,15 @@ Types: `src/data/types.ts` (`DemoPerson`, `DemoMedia`, `DemoAlbum`, `DemoStory`,
 npm run dev
 ONLY=main node tests/e2e.cjs        # scenario's (ook: ONLY=vp voor 1440/768/390 px)
 node tests/dead-buttons.cjs         # klikt elke zichtbare knop
+node tests/phone.cjs                # iPhone 13, Pixel 5, 360 px: scroll, zoom, vegen, menu
 ```
 Uitslag in `tests/results-*.json`; dode-knoppencheck: `node tests/dead-buttons.cjs`. Verslag in `DEMO_TEST_REPORT.md` en `WOW_SCORECARD.md`.
+
+## Op de telefoon
+- Onderbalk *Voor jou · Foto's · Albums · Meer*; in *Meer* alle overige schermen. `+ Toevoegen` is op mobiel een zwevende knop rechtsonder.
+- **Vegen**: in de lichtbak (links/rechts bladeren, omlaag sluiten), de tijdmachine en de herinneringsspeler.
+- Invoervelden zijn 16 px zodat iOS niet inzoomt; schermvullende weergaven gebruiken `100dvh` en houden rekening met de notch/home-balk (`safe-area-inset`).
+- Dialogen verschijnen op mobiel als *bottom sheet*; de stamboom wordt een overzicht per generatie.
 
 ## Beperkingen (bewust)
 - Geen backend, inlog, uploads, betalingen, e-mail, versleuteling of echte koppelingen. Alles wat zo lijkt, is gelabeld als *demo*, *voorbeeld* of *concept*.

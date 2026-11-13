@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, X, Image as ImageIcon, Gift, Images } from 'luci
 import { useDemo } from '../demo/store'
 import { Avatar } from '../components/ui'
 import { cx } from '../lib/format'
+import { useSwipe } from '../lib/useSwipe'
 
 const CHAPTERS = [
   { y: '1975', id: 'm-1975-portrait', title: 'Het begin', text: 'Op een zaterdag in juni trouwen Pieter en Ineke op het stadhuis van Haarlem. In een geleende Opel.', people: ['pieter', 'ineke'], tone: 'bw', bg: '#1a1a1a' },
@@ -31,9 +32,10 @@ export default function TimeMachine() {
   // voorladen
   useEffect(() => { CHAPTERS.forEach((c) => { const m = state.media.find((x) => x.id === c.id); if (m) { const im = new Image(); im.src = m.src } }) }, [state.media])
 
+  const swipe = useSwipe(() => go(1), () => go(-1))
   const c = CHAPTERS[Math.min(i, CHAPTERS.length - 1)]
   return (
-    <div className="fixed inset-0 z-[78] text-white overflow-hidden dark-surface transition-colors duration-700" style={{ background: end ? '#0B1226' : c.bg }} role="dialog" aria-modal="true" aria-label="Tijdmachine">
+    <div {...swipe} className="fixed inset-0 h-[100dvh] z-[78] text-white overflow-hidden dark-surface transition-colors duration-700 touch-pan-y" style={{ background: end ? '#0B1226' : c.bg }} role="dialog" aria-modal="true" aria-label="Tijdmachine">
       {CHAPTERS.map((ch, k) => { const m = state.media.find((x) => x.id === ch.id); return m ? (
         <div key={ch.y} aria-hidden={k !== i} className={cx('absolute inset-0 transition-opacity duration-700', k === i && !end ? 'opacity-100' : 'opacity-0')}>
           <img src={m.src} alt={k === i ? m.alt : ''} className={cx('absolute inset-0 w-full h-full object-cover', k === i && 'animate-kenburns', ch.tone === 'bw' && 'grayscale contrast-110', ch.tone === 'eighties' && 'sepia-[.35] saturate-[.85]', ch.tone === 'nineties' && 'saturate-[.8] sepia-[.15]')} />
@@ -71,7 +73,7 @@ export default function TimeMachine() {
         </div>
       )}
 
-      <div className="absolute bottom-0 inset-x-0 p-4 sm:p-6 flex items-center gap-2 sm:gap-3">
+      <div className="absolute bottom-0 inset-x-0 p-4 sm:p-6 pb-[max(1rem,env(safe-area-inset-bottom))] flex items-center gap-2 sm:gap-3">
         <button onClick={() => go(-1)} disabled={i === 0} className="h-12 px-4 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 flex items-center gap-2 font-semibold" aria-label="Terug (pijltje links)"><ArrowLeft size={19} /><span className="hidden sm:inline">Terug</span></button>
         {!end && <button onClick={() => navigate(`/foto/${c.id}`)} className="h-12 px-4 rounded-full bg-white/10 hover:bg-white/20 flex items-center gap-2 font-semibold"><ImageIcon size={18} /> <span className="hidden sm:inline">Bekijk foto</span><span className="sm:hidden">Foto</span></button>}
         {!end && <button onClick={() => go(1)} className="ml-auto h-12 px-5 rounded-full bg-white text-ink hover:bg-white/90 flex items-center gap-2 font-semibold" autoFocus><span className="hidden sm:inline">{i === CHAPTERS.length - 1 ? 'Naar de epiloog' : 'Volgend hoofdstuk'}</span><span className="sm:hidden">Volgende</span> <ArrowRight size={19} /></button>}

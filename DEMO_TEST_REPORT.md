@@ -10,6 +10,8 @@
 | Dode knoppen (`tests/dead-buttons.cjs`) | **1.213 knoppen en links geklikt, 0 JS-fouten.** 21 meldingen in de eerste run, allemaal verklaard of opgelost (zie onder). Hercontrole: 362 klikken op de betrokken schermen, 0 zonder effect |
 | Data en paden (`scripts/check_refs.py`) | **OK**: 74 media (63 foto's, 8 video's, 3 audio), alle ID's en bestanden bestaan |
 | JS-fouten en 404's | **0** tijdens alle scenario's |
+| Telefoon (`tests/phone.cjs`): iPhone 13, Pixel 5, 360 px | **207 / 207 geslaagd**: 21 schermen × 3 toestellen zonder horizontale scroll, inzoomende velden of kapotte beelden; vegen in lichtbak, tijdmachine en herinneringsspeler; mobiel menu; 0 JS-fouten |
+| Automatische demo (“Speel de demo af”) | **Geslaagd**: 13 scènes, eindscherm, stoppen, demo-state ongewijzigd |
 | TypeScript (`tsc -b`) en build | Zonder fouten |
 
 ## De 14 kritieke scenario's uit de masterprompt
@@ -60,8 +62,12 @@ Aanvullend getest: Schatkamer-fragment koppelen aan een verhaal, familie uitnodi
 9. Dode-knoppencheck, eerste run (21 meldingen): 17 jaarknoppen op de tijdlijn scrolden wel, maar de check mat geen scroll; wel kwam daarbij een echte fout aan het licht: het verkeerde jaar bleef gemarkeerd (opgelost). 3 meldingen waren al-actieve filters (“Alles”) en 4 het actieve menu-item. De check telt scrollen nu als effect en slaat actieve filters en links naar de huidige pagina over.
 8. Bij een tussentijdse wijziging herlaadde de dev-server midden in een test; de tests draaien nu tegen een productiebuild.
 
+## Telefoonronde (aanvullend)
+Gevonden en opgelost: invoervelden < 16 px (iOS zoomt in), krappe kopregel (menuknop 24 px breed), geen veegbewegingen, stamboom als zijwaarts scrollvlak, icoonknoppen zonder naam in de documentlade, footerlinks met te klein tikvlak, `vh` i.p.v. `dvh` bij schermvullende weergaven.
+Getest met Playwright-emulatie (touch, mobiele user-agent, devicePixelRatio). **Niet** getest op fysieke toestellen of in echte Safari/iOS; Chromium-emulatie benadert dit goed maar niet volledig.
+
 ## Wat niet (volledig) getest kon worden
 - **Lighthouse / Core Web Vitals** zijn niet gemeten (geen Lighthouse in deze omgeving). Indicatie: de JS-bundel is ongeveer 180 KB gzip, de hero wordt voorgeladen en de overige beelden laden lui.
 - **Schermlezers** (NVDA, VoiceOver) zijn niet getest. Wel gecontroleerd: labels, `aria-*`, focus-trap in dialogen, zichtbare focusring en een skip-link.
 - **Contrast** is niet automatisch gemeten. De kleuren volgen het opgegeven palet; tekst staat donker op licht (ink op paper/wit) of wit op ink/brand.
-- **Safari en Firefox** zijn niet getest, alleen Chromium.
+- **Safari en Firefox** zijn niet getest, alleen Chromium (ook voor de telefoonemulatie).

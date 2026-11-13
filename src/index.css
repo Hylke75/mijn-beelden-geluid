@@ -26,7 +26,7 @@
   .chip-on { @apply chip bg-ink border-ink text-white; }
   .eyebrow { @apply text-[12px] font-semibold uppercase tracking-[0.08em] text-magenta; }
   .label { @apply block text-sm font-semibold text-ink mb-1.5; }
-  .input { @apply w-full h-11 rounded-xl border border-line bg-white px-3.5 text-[15px] text-ink placeholder:text-meta/70 focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition; }
+  .input { @apply w-full h-11 rounded-xl border border-line bg-white px-3.5 text-base sm:text-[15px] text-ink placeholder:text-meta/70 focus:outline-none focus:border-brand focus:ring-4 focus:ring-brand/10 transition; }
   .textarea { @apply input h-auto py-3 leading-relaxed; }
   .pill { @apply inline-flex items-center gap-1 rounded-full px-2.5 h-6 text-[12px] font-semibold; }
   .link { @apply text-brand font-semibold hover:underline underline-offset-4; }

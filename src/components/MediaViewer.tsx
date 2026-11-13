@@ -9,6 +9,7 @@ import { Avatar, Img } from './ui'
 import { DemoPlayer } from './Player'
 import { cx, fmtDate } from '../lib/format'
 import { SOURCE_LABEL } from '../lib/selectors'
+import { useSwipe } from '../lib/useSwipe'
 
 export function MediaViewer() {
   const [params, setParams] = useSearchParams()
@@ -28,6 +29,7 @@ export function MediaViewer() {
     cur.set('m', l[(i + d + l.length) % l.length]); setParams(cur, { replace: true })
   }
   const close = () => { const next = new URLSearchParams(params); next.delete('m'); setParams(next) }
+  const swipe = useSwipe(() => go(1), () => go(-1), { onDown: () => close() })
 
   useEffect(() => {
     if (!m) return
@@ -55,28 +57,28 @@ export function MediaViewer() {
   const family = state.viewAs !== 'sanne'
 
   return createPortal(
-    <div className="fixed inset-0 z-[75] bg-[#0B1226] text-white flex flex-col lg:flex-row dark-surface animate-fadeIn" role="dialog" aria-modal="true" aria-label={`Lichtbak: ${m.title}`}>
+    <div className="fixed inset-0 h-[100dvh] z-[75] bg-[#0B1226] text-white flex flex-col lg:flex-row dark-surface animate-fadeIn" role="dialog" aria-modal="true" aria-label={`Lichtbak: ${m.title}`}>
       <div className="relative flex-1 min-h-0 flex flex-col">
         <div className="flex items-center gap-2 px-3 sm:px-5 h-16 shrink-0">
           <button id="viewer-close" onClick={close} className="h-11 w-11 rounded-full hover:bg-white/10 flex items-center justify-center" aria-label="Sluiten (Esc)"><X size={22} /></button>
-          <span className="text-white/60 text-sm tabular-nums">{idx + 1} van {list.length}</span>
+          <span className="text-white/60 text-sm tabular-nums">{idx + 1} van {list.length}<span className="sm:hidden"> · veeg om te bladeren</span></span>
           <div className="ml-auto flex items-center gap-1">
             {!family && <button onClick={() => { toggleFavorite(m.id); toast({ text: m.favorite ? 'Verwijderd uit Favorieten' : 'Toegevoegd aan Favorieten' }) }} className={cx('h-11 w-11 rounded-full hover:bg-white/10 flex items-center justify-center', m.favorite && 'text-magenta')} aria-pressed={m.favorite} aria-label={m.favorite ? 'Verwijder uit favorieten' : 'Favoriet'}><Heart size={21} fill={m.favorite ? 'currentColor' : 'none'} /></button>}
             <button onClick={() => { close(); navigate(`/foto/${m.id}`) }} className="h-11 px-3 rounded-full hover:bg-white/10 flex items-center gap-2 text-sm font-semibold" aria-label="Open volledige weergave met verhaal"><Expand size={18} /><span className="hidden sm:inline">Volledige weergave</span></button>
           </div>
         </div>
-        <div className="relative flex-1 min-h-0 px-3 sm:px-16 pb-3 sm:pb-6 flex items-center justify-center">
+        <div className="relative flex-1 min-h-0 px-3 sm:px-16 pb-3 sm:pb-6 flex items-center justify-center touch-pan-y" {...swipe}>
           {m.kind === 'photo' ? (
             <Img key={m.id} src={m.src} alt={m.alt} eager era={m.era} grain className="w-full h-full bg-transparent rounded-lg animate-fadeIn" imgClassName="object-contain" />
           ) : (
             <div className="w-full h-full max-w-5xl"><DemoPlayer m={m} dark /></div>
           )}
-          <button onClick={() => go(-1)} className="absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" aria-label="Vorige (pijltje links)"><ChevronLeft size={26} /></button>
-          <button onClick={() => go(1)} className="absolute right-1 sm:right-3 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" aria-label="Volgende (pijltje rechts)"><ChevronRight size={26} /></button>
+          <button onClick={() => go(-1)} className="hidden sm:flex absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" aria-label="Vorige (pijltje links)"><ChevronLeft size={26} /></button>
+          <button onClick={() => go(1)} className="hidden sm:flex absolute right-1 sm:right-3 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center" aria-label="Volgende (pijltje rechts)"><ChevronRight size={26} /></button>
         </div>
       </div>
 
-      <aside className="w-full lg:w-[380px] shrink-0 bg-white text-ink lg:h-full max-h-[48vh] lg:max-h-none overflow-y-auto rounded-t-3xl lg:rounded-none" aria-label="Details">
+      <aside className="w-full lg:w-[380px] shrink-0 bg-white text-ink lg:h-full max-h-[46dvh] lg:max-h-none pb-[env(safe-area-inset-bottom)] overflow-y-auto rounded-t-3xl lg:rounded-none" aria-label="Details">
         <div className="p-6">
           <h2 className="font-display text-[22px] font-bold leading-tight">{m.title}</h2>
           <div className="mt-3 space-y-1.5 text-[15px] text-meta">
