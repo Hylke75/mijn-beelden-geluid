@@ -5,6 +5,7 @@ const fs = require('fs')
 const BASE = process.argv[2] || 'http://127.0.0.1:5173'
 const ROUTES = ['/voor-jou', '/fotos', '/foto/m-1988-kitchen', '/foto/m-2021-deer', '/tijdlijn', '/tijdmachine', '/albums', '/albums/al-zeeland', '/albums/al-oma-nel', '/verhalen', '/verhalen/s-nel-appeltaart', '/familie', '/kluis', '/bronnen', '/nalatenschap', '/nalatenschap/voorbeeld?wens=wish-daan', '/nationaal-archief', '/nationaal-archief/aanbieden', '/schatkamer', '/instellingen', '/zoeken?q=Mila', '/hulp', '/fotos?m=m-1975-haarlem']
 const SEL = 'main button:visible, main a:visible, [role=dialog] button:visible, [role=dialog] a:visible, header button:visible, header a:visible, aside a:visible, aside button:visible'
+const goto = async (p, url) => { for (let i = 0; i < 3; i++) { try { return await p.goto(url, { waitUntil: 'networkidle' }) } catch { await p.waitForTimeout(500) } } }
 const sig = () => [location.href, document.body.innerHTML.length, document.querySelectorAll('[role=dialog],[role=menu],[role=listbox],[role=status] > *').length, document.activeElement && document.activeElement.getAttribute('aria-expanded')].join('|')
 
 ;(async () => {
@@ -18,10 +19,10 @@ const sig = () => [location.href, document.body.innerHTML.length, document.query
     p.on('pageerror', (e) => errors.push(e.message))
     while (queue.length) {
       const r = queue.shift()
-      await p.goto(BASE + r, { waitUntil: 'networkidle' })
+      await goto(p, BASE + r)
       const n = await p.locator(SEL).count()
       for (let i = 0; i < n; i++) {
-        if (i > 0) await p.goto(BASE + r, { waitUntil: 'networkidle' })
+        if (i > 0) await goto(p, BASE + r)
         const el = p.locator(SEL).nth(i)
         if (!(await el.count())) continue
         if (await el.isDisabled().catch(() => true)) continue

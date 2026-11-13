@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, MapPin, CalendarDays, Heart, FolderPlus, Share2, Download, Users, Gift, Check, Landmark, PenLine, ArrowRight, Quote, Lock, Mic } from 'lucide-react'
 import { useDemo } from '../demo/store'
@@ -11,7 +11,8 @@ import { SOURCE_LABEL } from '../lib/selectors'
 
 export default function FotoDetail() {
   const { id = '' } = useParams()
-  const { state, toggleFavorite, toast, keepStoryFor } = useDemo()
+  const { state, toggleFavorite, toast, keepStoryFor, markWow } = useDemo()
+  useEffect(() => { if (id === 'm-1988-kitchen') markWow(2) }, [id, markWow])
   const ui = useUI()
   const navigate = useNavigate()
   const open = useOpenMedia()

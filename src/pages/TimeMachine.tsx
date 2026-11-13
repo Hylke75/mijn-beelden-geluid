@@ -16,10 +16,11 @@ const CHAPTERS = [
 ]
 
 export default function TimeMachine() {
-  const { state } = useDemo()
+  const { state, markWow } = useDemo()
   const navigate = useNavigate()
   const [i, setI] = useState(0)
   const end = i === CHAPTERS.length
+  useEffect(() => { if (end) markWow(1) }, [end, markWow])
   const go = useCallback((d: number) => setI((x) => Math.max(0, Math.min(CHAPTERS.length, x + d))), [])
   const close = useCallback(() => navigate('/tijdlijn'), [navigate])
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function TimeMachine() {
           <div className="font-display font-bold leading-none tracking-[-0.04em] text-[88px] sm:text-[150px] text-white/95">{c.y}</div>
           <h2 className="font-display text-[26px] sm:text-[36px] font-bold mt-2">{c.title}</h2>
           <p className="text-[18px] sm:text-[21px] text-white/85 mt-2 max-w-2xl leading-snug">{c.text}</p>
-          <div className="flex items-center gap-2 mt-5">{c.people.map((pid) => { const p = state.people.find((x) => x.id === pid); return <span key={pid} className="inline-flex items-center gap-2 h-9 pl-1 pr-3 rounded-full bg-white/12 backdrop-blur text-sm font-medium"><Avatar person={p} size={28} />{p?.name}</span> })}</div>
+          <div className="flex items-center gap-2 mt-5">{c.people.map((pid) => { const p = state.people.find((x) => x.id === pid); return <span key={pid} className="inline-flex items-center gap-2 h-9 pl-1 pr-3 rounded-full bg-white/15 backdrop-blur text-sm font-medium"><Avatar person={p} size={28} />{p?.name}</span> })}</div>
         </div>
       ) : (
         <div className="absolute inset-0 flex items-center justify-center p-6 text-center animate-rise">

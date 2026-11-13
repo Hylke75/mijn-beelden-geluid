@@ -1,9 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+function useHashScroll() { const { hash } = useLocation(); useEffect(() => { if (hash) setTimeout(() => document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: 'smooth' }), 80) }, [hash]) }
 import { UserPlus, Eye, Users, Lock, Mail, Check, ShieldCheck, FolderOpen, Info } from 'lucide-react'
 import { useDemo } from '../demo/store'
 import { useUI } from '../demo/ui'
 import { Avatar, DemoNote, Img, PageHeader, Toggle } from '../components/ui'
 import type { DemoPerson } from '../data/types'
+import { QuestionsSection } from '../components/AskFamily'
 import { cx, fmtDate } from '../lib/format'
 
 function PersonNode({ p, me }: { p: DemoPerson; me?: boolean }) {
@@ -17,6 +20,7 @@ function PersonNode({ p, me }: { p: DemoPerson; me?: boolean }) {
 }
 
 export default function Familie() {
+  useHashScroll()
   const { state, setViewAs, toast, setDocumentConsent } = useDemo()
   const ui = useUI()
   const navigate = useNavigate()
@@ -83,6 +87,8 @@ export default function Familie() {
           <p className="text-sm text-meta mt-3 leading-relaxed">Toegang tot je foto's betekent nooit automatisch toegang tot je documenten. Dat regel je per document, apart.</p>
         </section>
       </div>
+
+      <QuestionsSection />
 
       <section className="mb-8">
         <h2 className="font-display text-2xl font-bold mb-4">Leden en toegang</h2>

@@ -190,6 +190,27 @@ async function run(name, fn) { try { await p_reset_view() ; const d = await fn()
     expect(outline !== 'none', 'geen zichtbare focus')
   })
 
+  await run('15. Herinnering afspelen (Memories) en bewaren als album', async () => {
+    await go(p, '/voor-jou'); await p.getByRole('button', { name: /Speel herinnering af: Oma Nel/ }).click(); await p.waitForTimeout(300)
+    expect(await p.getByRole('dialog', { name: /Herinnering: Oma Nel/ }).isVisible(), 'speler opent niet')
+    for (let i = 0; i < 5; i++) { await p.keyboard.press('ArrowRight'); await p.waitForTimeout(120) }
+    await p.getByRole('button', { name: 'Bewaar als album' }).click(); await p.waitForTimeout(200)
+    await go(p, '/albums'); expect(await p.getByText('Oma Nel').count() >= 2, 'herinnering niet als album bewaard')
+  })
+
+  await run('16. Vraag aan de familie → antwoord wordt verhaal', async () => {
+    await go(p, '/familie#vragen'); await p.getByRole('button', { name: 'Stel een vraag' }).first().click()
+    await p.getByRole('button', { name: /Vraag versturen/ }).click(); await p.waitForTimeout(7200)
+    await go(p, '/familie'); expect(await p.getByText('Beantwoord · luister').count() >= 1, 'geen antwoord')
+    await go(p, '/verhalen'); expect(await p.getByText('Wat was je eerste baan').first().isVisible(), 'antwoord niet in Verhalen')
+  })
+
+  await run('17. Voortgang “Ontdek de mogelijkheden” telt ontdekte hoogtepunten', async () => {
+    await go(p, '/voor-jou'); await p.getByRole('button', { name: 'Ontdek de mogelijkheden' }).first().click()
+    const txt = await p.locator('[role=dialog]').innerText(); const n = Number((txt.match(/(\d) van 5 ontdekt/) || [])[1])
+    expect(n >= 4, `slechts ${n} van 5 gemarkeerd`); await p.keyboard.press('Escape'); return `${n} van 5`
+  })
+
   await run('13. Geen JS-fouten of 404\'s tijdens alle scenario\'s', async () => { expect(p.errors.length === 0, p.errors.slice(0, 3).join(' | ')) })
 
   await run('14. Reset → oorspronkelijke staat', async () => {

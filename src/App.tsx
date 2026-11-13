@@ -4,7 +4,7 @@ import { AppShell } from './components/AppShell'
 import { MediaViewer } from './components/MediaViewer'
 import { GlobalModals } from './components/GlobalModals'
 import { Toasts } from './components/Toasts'
-import { TourPanel, PresenterPanel } from './components/Tour'
+import { TourPanel, PresenterPanel, WelcomePanel } from './components/Tour'
 import { useDemo } from './demo/store'
 import VoorJou from './pages/VoorJou'
 import Fotos from './pages/Fotos'
@@ -73,6 +73,7 @@ export default function App() {
       <GlobalModals />
       <TourPanel />
       <PresenterPanel />
+      <WelcomePanel />
       <Toasts />
     </>
   )

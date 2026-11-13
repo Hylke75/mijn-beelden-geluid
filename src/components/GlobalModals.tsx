@@ -377,15 +377,16 @@ export const WOWS = [
 
 function WowModal() {
   const ui = useUI(); const navigate = useNavigate(); const { state } = useDemo()
+  const done = state.wowsDone.length
   return (
-    <Modal open onClose={ui.close} title="Ontdek de mogelijkheden" subtitle="Vijf korte ervaringen van 1–2 minuten. Je kunt altijd gewoon zelf verder klikken." size="lg" icon={<span className="h-11 w-11 rounded-2xl bg-magenta-light text-magenta flex items-center justify-center"><Sparkles size={22} /></span>}>
+    <Modal open onClose={ui.close} title="Ontdek de mogelijkheden" subtitle={<span>Vijf korte ervaringen van 1–2 minuten. <strong className="text-ink">{done} van 5 ontdekt.</strong> Je kunt altijd gewoon zelf verder klikken.</span>} size="lg" icon={<span className="h-11 w-11 rounded-2xl bg-magenta-light text-magenta flex items-center justify-center"><Sparkles size={22} /></span>}>
       <ul className="grid sm:grid-cols-2 gap-3">
         {WOWS.map((w) => { const m = state.media.find((x) => x.id === w.img); return (
           <li key={w.n} className={w.n === 5 ? 'sm:col-span-2' : ''}>
             <button onClick={() => { ui.close(); navigate(w.to) }} className="w-full group flex items-stretch gap-0 rounded-2xl border border-line overflow-hidden hover:border-brand hover:shadow-lift transition-all text-left bg-white">
               <Img src={m?.thumb ?? ''} alt="" era={m?.era} className="w-28 shrink-0" />
               <span className="p-4 flex-1">
-                <span className="flex items-center gap-2 text-xs font-semibold text-magenta mb-1"><w.icon size={14} /> WOW {w.n} · <Clock size={12} /> 1–2 min</span>
+                <span className="flex items-center gap-2 text-xs font-semibold text-magenta mb-1"><w.icon size={14} /> WOW {w.n} · <Clock size={12} /> 1–2 min{state.wowsDone.includes(w.n) && <span className="pill bg-[#E7F6EE] text-[#1E6B43] ml-1"><Check size={11} /> Ontdekt</span>}</span>
                 <span className="block font-display font-bold text-[17px] leading-snug">{w.title}</span>
                 <span className="block text-sm text-meta mt-0.5">{w.text}</span>
               </span>

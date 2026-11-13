@@ -200,6 +200,15 @@ export interface DemoSettings {
   language: 'nl' | 'en'
 }
 
+export interface DemoQuestion {
+  id: Id
+  toId: Id
+  question: string
+  askedOn: string
+  status: 'verstuurd (demo)' | 'beantwoord'
+  storyId?: Id
+}
+
 export interface DemoState {
   version: number
   media: DemoMedia[]
@@ -218,4 +227,7 @@ export interface DemoState {
   viewAs: Id // 'sanne' of een familielid (demonstratieve kijkweergave)
   documentDemoConsent: Id[] // personen met afzonderlijke demo-toestemming voor documenten
   tourDone: boolean
+  wowsDone: number[]
+  questions: DemoQuestion[]
+  welcomeDismissed: boolean
 }

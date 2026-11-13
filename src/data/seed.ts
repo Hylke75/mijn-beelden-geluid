@@ -6,7 +6,7 @@ import { documents } from './documents'
 import { sources } from './sources'
 
 /** Verhoog bij wijzigingen in de seed, zodat oude localStorage-state wordt vervangen. */
-export const SEED_VERSION = 7
+export const SEED_VERSION = 8
 
 const media = mediaJson as DemoMedia[]
 const ids = (prefix: string | RegExp) => media.filter((m) => (typeof prefix === 'string' ? m.id.startsWith(prefix) : prefix.test(m.id))).map((m) => m.id)
@@ -120,6 +120,9 @@ export function createSeed(): DemoState {
       { id: 'n4', text: 'Neef Bram heeft je uitnodiging geaccepteerd', time: 'September', read: true, to: '/familie' },
     ],
     settings: { largeText: false, reduceMotion: false, notifyFamily: true, notifyMemories: true, notifyWeekly: false, faceGrouping: false, defaultVisibility: 'private', showOnThisDay: true, language: 'nl' },
-    viewAs: 'sanne', documentDemoConsent: [], tourDone: false,
+    viewAs: 'sanne', documentDemoConsent: [], tourDone: false, wowsDone: [], welcomeDismissed: false,
+    questions: [
+      { id: 'q-pieter-dias', toId: 'pieter', question: 'Welke dia zou je als eerste redden als het huis in brand stond?', askedOn: '2026-10-28', status: 'verstuurd (demo)' },
+    ],
   } satisfies DemoState)
 }

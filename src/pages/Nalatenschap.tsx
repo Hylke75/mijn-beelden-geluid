@@ -180,7 +180,8 @@ function AlbumHeirs({ albumId, onClose, onSave }: { albumId: string; onClose: ()
 }
 
 export function LegacyPreview() {
-  const { state } = useDemo()
+  const { state, markWow } = useDemo()
+  useEffect(() => { markWow(4) }, [markWow])
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const w = state.legacy.wishes.find((x) => x.id === params.get('wens')) ?? state.legacy.wishes[0]

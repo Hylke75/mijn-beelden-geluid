@@ -111,3 +111,26 @@ export function PresenterPanel() {
     </div>
   )
 }
+
+/** Rustig welkomstpaneel bij het eerste bezoek: niet blokkerend, met tijdsindicatie vooraf. */
+export function WelcomePanel() {
+  const { state, dismissWelcome } = useDemo()
+  const ui = useUI()
+  const navigate = useNavigate()
+  const loc = useLocation()
+  const [params] = useSearchParams()
+  if (state.welcomeDismissed || ui.tourStep != null || loc.pathname !== '/voor-jou' || params.get('presenter') || ui.modal) return null
+  return (
+    <div className="fixed z-[70] left-3 right-3 bottom-[76px] lg:left-auto lg:right-6 lg:bottom-6 lg:w-[380px] card shadow-modal p-5 animate-rise" role="region" aria-label="Welkom">
+      <button onClick={dismissWelcome} className="absolute top-3 right-3 h-8 w-8 rounded-full hover:bg-ink/5 flex items-center justify-center text-meta" aria-label="Welkomstbericht sluiten"><X size={16} /></button>
+      <div className="text-xs font-semibold text-magenta mb-1">Welkom in de demo</div>
+      <h2 className="font-display text-lg font-bold leading-snug pr-6">Je kijkt mee in het familiearchief van Sanne</h2>
+      <p className="text-[14px] text-ink/75 mt-1.5 leading-relaxed">Een fictieve familie, vier generaties. Alles is aan te klikken en je kunt niets kapot maken.</p>
+      <div className="space-y-2 mt-4">
+        <button className="w-full flex items-center gap-3 rounded-xl bg-brand text-white px-4 py-2.5 text-left hover:bg-brand-dark" onClick={() => { dismissWelcome(); ui.setTourStep(0); navigate(TOUR[0].to) }}><Play size={17} /><span className="flex-1"><span className="block font-semibold text-[15px]">Geef me een rondleiding</span><span className="block text-xs text-white/75">8 stappen · ongeveer 8 minuten</span></span></button>
+        <button className="w-full flex items-center gap-3 rounded-xl border border-line px-4 py-2.5 text-left hover:border-brand" onClick={() => { dismissWelcome(); ui.open({ type: 'wow' }) }}><Compass size={17} className="text-magenta" /><span className="flex-1"><span className="block font-semibold text-[15px]">Toon de 5 hoogtepunten</span><span className="block text-xs text-meta">Elk 1–2 minuten</span></span></button>
+      </div>
+      <button className="text-sm text-meta hover:text-ink mt-3 w-full text-center" onClick={dismissWelcome}>Liever zelf rondkijken</button>
+    </div>
+  )
+}

@@ -5,6 +5,8 @@ import { useUI } from '../demo/ui'
 import { Img, AvatarStack } from '../components/ui'
 import { useOpenMedia } from '../components/Media'
 import { fmtDate, plural } from '../lib/format'
+import { MemoryRow } from '../components/Memories'
+import { AskFamilyCard } from '../components/AskFamily'
 
 function greeting() {
   const h = new Date().getHours()
@@ -42,7 +44,7 @@ export default function VoorJou() {
         <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
           <div>
             <p className="text-meta font-medium text-[17px]">{greeting()}, Sanne</p>
-            <h1 className="font-display text-[34px] sm:text-[48px] font-bold leading-[1.02] tracking-[-0.025em] text-ink mt-1 max-w-[17ch] sm:max-w-none">Een leven vol verhalen. <span className="text-brand">Allemaal bij elkaar.</span></h1>
+            <h1 className="font-display text-[34px] sm:text-[46px] font-bold leading-[1.02] tracking-[-0.025em] text-ink mt-1 max-w-[17ch] sm:max-w-none">Een leven vol verhalen. <span className="text-brand">Allemaal bij elkaar.</span></h1>
           </div>
           <div className="hidden xl:flex gap-2">
             <button className="btn-secondary" onClick={() => ui.open({ type: 'wow' })}><Sparkles size={18} className="text-magenta" /> Ontdek de mogelijkheden</button>
@@ -51,7 +53,7 @@ export default function VoorJou() {
         </div>
 
         <div className="grid lg:grid-cols-[1fr_340px] gap-4">
-          <div className="relative rounded-3xl overflow-hidden h-[340px] sm:h-[440px] group">
+          <div className="relative rounded-3xl overflow-hidden h-[340px] sm:h-[420px] group">
             <Img src={hero.src} alt={hero.alt} eager className="absolute inset-0" imgClassName="group-hover:scale-[1.02] transition-transform duration-[1.2s]" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B1226]/80 via-[#0B1226]/10 to-transparent" />
             <div className="absolute left-0 right-0 bottom-0 p-6 sm:p-8 flex flex-wrap items-end justify-between gap-4">
@@ -88,6 +90,11 @@ export default function VoorJou() {
           <button className="btn-secondary btn-sm" onClick={() => ui.open({ type: 'wow' })}><Sparkles size={16} className="text-magenta" /> Ontdek de mogelijkheden</button>
           <button className="btn-secondary btn-sm" onClick={() => ui.open({ type: 'tourIntro' })}><PlayCircle size={16} /> Geef me een rondleiding</button>
         </div>
+      </section>
+
+      <section className="-mt-4 sm:-mt-6">
+        <div className="flex items-end justify-between mb-3"><h2 className="font-display text-[20px] font-bold">Herinneringen voor jou</h2><span className="text-sm text-meta hidden sm:inline">Automatisch samengesteld · tik om af te spelen</span></div>
+        <MemoryRow />
       </section>
 
       <section className="grid lg:grid-cols-[1.1fr_1fr] gap-6">
@@ -139,7 +146,7 @@ export default function VoorJou() {
         </div>
       </section>
 
-      <section className="grid md:grid-cols-[1.4fr_1fr] gap-4">
+      <section className="grid md:grid-cols-2 xl:grid-cols-[1.3fr_1fr_1fr] gap-4">
         <div className="card p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-display text-lg font-bold">Jouw archief</h2>
@@ -161,6 +168,7 @@ export default function VoorJou() {
           </div>
           <p className="text-sm text-meta mt-4">Een kopie uit {state.sources.filter((s) => s.status === 'connected').length} gekoppelde voorbeeldbron en {state.sources.filter((s) => s.status === 'manual').length} handmatige imports. <Link to="/bronnen" className="link">Bronnen bekijken</Link></p>
         </div>
+        <AskFamilyCard />
         <div className="rounded-2xl p-6 bg-[linear-gradient(135deg,#FDE6F3,#F2F4FC)] border border-[#F6D3E7] flex flex-col">
           <HeartHandshake size={24} className="text-magenta" />
           <h2 className="font-display text-xl font-bold mt-3">Wat wil je later doorgeven?</h2>

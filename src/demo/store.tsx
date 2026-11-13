@@ -17,6 +17,21 @@ function load(): DemoState {
   return createSeed()
 }
 
+const ANSWERS: Record<string, { date: string; mediaId: Id; linked: Id[]; body: string[] }> = {
+  ineke: { date: '1969-05-03', mediaId: 'm-1977-zandvoort', linked: ['m-1975-portrait', 'm-1975-car'], body: [
+    'Mijn eerste baan was bij de bakker op de hoek van de Zijlweg. Ik was vijftien en stond elke zaterdag om zes uur achter de toonbank, met een wit schortje dat altijd onder de bloem zat.',
+    'De bakker heette meneer Van Loon. Hij gaf me op mijn eerste dag een krentenbol en zei: “Als je die opeet voordat de winkel opengaat, merkt niemand het.” Ik heb er drie jaar lang elke zaterdag één gekregen.',
+    'Daar heb ik trouwens ook je vader voor het eerst gezien. Hij kwam elke zaterdag brood halen voor zijn moeder, oma Nel. Hij kocht altijd een half bruin en deed er heel lang over.',
+  ] },
+  pieter: { date: '1978-06-10', mediaId: 'm-1975-portrait', linked: ['m-1975-car', 'm-2025-opa-mila'], body: [
+    'Als het huis in brand stond, zou ik de dia van je moeder op het bordes van het stadhuis pakken. Niet de mooiste, wel de belangrijkste.',
+    'Op die dia kijkt ze opzij, naar haar moeder, en lacht ze om iets wat ik nooit heb gehoord. Ik heb het haar honderd keer gevraagd. Ze zegt dat ze het niet meer weet. Ik geloof haar niet.',
+  ] },
+  default: { date: '1990-01-01', mediaId: 'm-1988-table', linked: [], body: [
+    'Dat is een mooie vraag. Ik moest er even over nadenken, maar ik weet het nog precies: het was bij oma Nel aan tafel, op een zondag, met appeltaart.',
+  ] },
+}
+
 const uid = (p: string) => `${p}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
 const today = () => new Date().toISOString().slice(0, 10)
 
@@ -57,6 +72,10 @@ interface Ctx {
   setTourDone: (v: boolean) => void
   keepStoryFor: (storyId: Id, personId: Id) => void
   setDocumentConsent: (personId: Id, on: boolean) => void
+  markWow: (n: number) => void
+  dismissWelcome: () => void
+  askQuestion: (toId: Id, question: string) => Id
+  answerQuestion: (questionId: Id) => Id
   resetDemo: () => void
 }
 
@@ -186,7 +205,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     })),
     submitHeritageDemo: (mediaId, context) => {
       const sub: DemoHeritageSubmission = { ...context, id: uid('sub'), mediaId, status: 'Ingediend (demo) · wacht op beoordeling', submittedOn: today() }
-      setState((s) => notify({ ...s, submissions: [sub, ...s.submissions] }, `Je bood “${context.title}” aan bij het nationaal archief (demo)`))
+      setState((s) => notify({ ...s, wowsDone: s.wowsDone.includes(5) ? s.wowsDone : [...s.wowsDone, 5], submissions: [sub, ...s.submissions] }, `Je bood “${context.title}” aan bij het nationaal archief (demo)`))
       return sub
     },
     withdrawSubmission: (id) => setState((s) => ({ ...s, submissions: s.submissions.filter((x) => x.id !== id) })),
@@ -199,11 +218,36 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     updateMedia: (mediaId, patch) => setState((s) => ({ ...s, media: s.media.map((m) => (m.id === mediaId ? { ...m, ...patch } : m)) })),
     updateDocument: (docId, patch) => setState((s) => ({ ...s, documents: s.documents.map((d) => (d.id === docId ? { ...d, ...patch } : d)) })),
     updateSettings: (patch) => setState((s) => ({ ...s, settings: { ...s.settings, ...patch } })),
-    setViewAs: (personId) => setState((s) => ({ ...s, viewAs: personId })),
+    setViewAs: (personId) => setState((s) => ({ ...s, viewAs: personId, wowsDone: personId !== 'sanne' && !s.wowsDone.includes(3) ? [...s.wowsDone, 3] : s.wowsDone })),
     markNotificationsRead: () => setState((s) => ({ ...s, notifications: s.notifications.map((n) => ({ ...n, read: true })) })),
     setTourDone: (v) => setState((s) => ({ ...s, tourDone: v })),
     keepStoryFor: (storyId, personId) => setState((s) => ({ ...s, stories: s.stories.map((st) => (st.id === storyId ? { ...st, keepFor: Array.from(new Set([...(st.keepFor ?? []), personId])) } : st)) })),
     setDocumentConsent: (personId, on) => setState((s) => ({ ...s, documentDemoConsent: on ? Array.from(new Set([...s.documentDemoConsent, personId])) : s.documentDemoConsent.filter((x) => x !== personId) })),
+    markWow: (n) => setState((s) => (s.wowsDone.includes(n) ? s : { ...s, wowsDone: [...s.wowsDone, n] })),
+    dismissWelcome: () => setState((s) => ({ ...s, welcomeDismissed: true })),
+    askQuestion: (toId, question) => {
+      const id = uid('q')
+      setState((s) => ({ ...s, questions: [{ id, toId, question, askedOn: today(), status: 'verstuurd (demo)' }, ...s.questions] }))
+      return id
+    },
+    answerQuestion: (questionId) => {
+      const storyId = uid('story')
+      setState((s) => {
+        const q = s.questions.find((x) => x.id === questionId)
+        if (!q || q.status === 'beantwoord') return s
+        const ans = ANSWERS[q.toId] ?? ANSWERS.default
+        const who = s.people.find((p) => p.id === q.toId)
+        const story: DemoStory = {
+          id: storyId, title: q.question.replace(/\?$/, ''), narratorId: q.toId, date: ans.date, writtenOn: today(), mediaId: ans.mediaId,
+          linkedMediaIds: ans.linked, peopleIds: [q.toId, 'sanne'], albumIds: [], intro: ans.body[0], body: ans.body,
+          context: `Ingesproken door ${who?.name} als antwoord op jouw vraag · audio, automatisch uitgeschreven (demo)`, audioId: 'demo-answer', createdByDemo: true, schatkamerIds: [],
+        }
+        return notify({
+          ...s, stories: [story, ...s.stories], questions: s.questions.map((x) => (x.id === questionId ? { ...x, status: 'beantwoord', storyId: story.id } : x)),
+        }, `${who?.name} heeft je vraag beantwoord met een audioverhaal`)
+      })
+      return storyId
+    },
     resetDemo: () => {
       try { localStorage.removeItem(STORAGE_KEY); sessionStorage.clear() } catch { /* */ }
       setState(createSeed())
