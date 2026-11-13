@@ -7,7 +7,7 @@
 |---|---|
 | Scenariotests (`ONLY=main`) | **21 / 21 geslaagd** |
 | Viewports 1440 / 768 / 390 px (`ONLY=vp`) | **Geslaagd**: geen horizontale scroll, geen kapotte beelden op 20 routes × 3 breedtes |
-| Dode knoppen (`tests/dead-buttons.cjs`) | **1.213 knoppen en links geklikt, 0 JS-fouten.** 21 meldingen in de eerste run, allemaal verklaard of opgelost (zie onder). Hercontrole: 362 klikken op de betrokken schermen, 0 zonder effect |
+| Dode knoppen (`tests/dead-buttons.cjs`) | **Laatste run: 1.186 knoppen en links geklikt, 0 zonder effect, 0 JS-fouten.** Eerste run: 1.213 geklikt, 0 JS-fouten. 21 meldingen in de eerste run, allemaal verklaard of opgelost (zie onder). Hercontrole: 362 klikken op de betrokken schermen, 0 zonder effect |
 | Data en paden (`scripts/check_refs.py`) | **OK**: 74 media (63 foto's, 8 video's, 3 audio), alle ID's en bestanden bestaan |
 | JS-fouten en 404's | **0** tijdens alle scenario's |
 | Telefoon (`tests/phone.cjs`): iPhone 13, Pixel 5, 360 px | **207 / 207 geslaagd**: 21 schermen × 3 toestellen zonder horizontale scroll, inzoomende velden of kapotte beelden; vegen in lichtbak, tijdmachine en herinneringsspeler; mobiel menu; 0 JS-fouten |
