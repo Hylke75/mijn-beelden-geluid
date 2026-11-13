@@ -3,10 +3,10 @@
 const { chromium } = require('playwright')
 const fs = require('fs')
 const BASE = process.argv[2] || 'http://127.0.0.1:5173'
-const ROUTES = ['/voor-jou', '/fotos', '/foto/m-1988-kitchen', '/foto/m-2021-deer', '/tijdlijn', '/tijdmachine', '/albums', '/albums/al-zeeland', '/albums/al-oma-nel', '/verhalen', '/verhalen/s-nel-appeltaart', '/familie', '/kluis', '/bronnen', '/nalatenschap', '/nalatenschap/voorbeeld?wens=wish-daan', '/nationaal-archief', '/nationaal-archief/aanbieden', '/schatkamer', '/instellingen', '/zoeken?q=Mila', '/hulp', '/fotos?m=m-1975-haarlem']
+const ROUTES = process.env.ROUTES ? process.env.ROUTES.split(',') : ['/voor-jou', '/fotos', '/foto/m-1988-kitchen', '/foto/m-2021-deer', '/tijdlijn', '/tijdmachine', '/albums', '/albums/al-zeeland', '/albums/al-oma-nel', '/verhalen', '/verhalen/s-nel-appeltaart', '/familie', '/kluis', '/bronnen', '/nalatenschap', '/nalatenschap/voorbeeld?wens=wish-daan', '/nationaal-archief', '/nationaal-archief/aanbieden', '/schatkamer', '/instellingen', '/zoeken?q=Mila', '/hulp', '/fotos?m=m-1975-haarlem']
 const SEL = 'main button:visible, main a:visible, [role=dialog] button:visible, [role=dialog] a:visible, header button:visible, header a:visible, aside a:visible, aside button:visible'
 const goto = async (p, url) => { for (let i = 0; i < 3; i++) { try { return await p.goto(url, { waitUntil: 'networkidle' }) } catch { await p.waitForTimeout(500) } } }
-const sig = () => [location.href, document.body.innerHTML.length, document.querySelectorAll('[role=dialog],[role=menu],[role=listbox],[role=status] > *').length, document.activeElement && document.activeElement.getAttribute('aria-expanded')].join('|')
+const sig = () => [Math.round(scrollY / 50), location.href, document.body.innerHTML.length, document.querySelectorAll('[role=dialog],[role=menu],[role=listbox],[role=status] > *').length, document.activeElement && document.activeElement.getAttribute('aria-expanded')].join('|')
 
 ;(async () => {
   const b = await chromium.launch()
@@ -26,6 +26,8 @@ const sig = () => [location.href, document.body.innerHTML.length, document.query
         const el = p.locator(SEL).nth(i)
         if (!(await el.count())) continue
         if (await el.isDisabled().catch(() => true)) continue
+        // al-actieve filter of tab: klikken hoeft niets te veranderen
+        if (await el.evaluate((e) => e.getAttribute('aria-selected') === 'true' || e.getAttribute('aria-pressed') === 'true' || e.classList.contains('chip-on')).catch(() => false)) continue
         const label = ((await el.getAttribute('aria-label').catch(() => '')) || (await el.innerText().catch(() => '')).trim()).replace(/\s+/g, ' ').slice(0, 50)
         const href = await el.getAttribute('href').catch(() => null)
         const before = await p.evaluate(sig)
@@ -34,7 +36,7 @@ const sig = () => [location.href, document.body.innerHTML.length, document.query
         await p.waitForTimeout(220)
         const after = await p.evaluate(sig).catch(() => 'nav')
         // een link naar de huidige route (bv. actief menu-item) telt als werkend
-        const selfLink = href && (BASE + href) === before.split('|')[0]
+        const selfLink = href && (BASE + href) === before.split('|')[1]
         if (before === after && !selfLink) dead.push(`${r}: “${label}”`)
       }
     }

@@ -7,7 +7,7 @@
 |---|---|
 | Scenariotests (`ONLY=main`) | **21 / 21 geslaagd** |
 | Viewports 1440 / 768 / 390 px (`ONLY=vp`) | **Geslaagd**: geen horizontale scroll, geen kapotte beelden op 20 routes × 3 breedtes |
-| Dode knoppen (`tests/dead-buttons.cjs`) | Bezig: uitslag volgt in een volgende commit |
+| Dode knoppen (`tests/dead-buttons.cjs`) | **1.213 knoppen en links geklikt, 0 JS-fouten.** 21 meldingen in de eerste run, allemaal verklaard of opgelost (zie onder). Hercontrole: 362 klikken op de betrokken schermen, 0 zonder effect |
 | Data en paden (`scripts/check_refs.py`) | **OK**: 74 media (63 foto's, 8 video's, 3 audio), alle ID's en bestanden bestaan |
 | JS-fouten en 404's | **0** tijdens alle scenario's |
 | TypeScript (`tsc -b`) en build | Zonder fouten |
@@ -16,7 +16,7 @@
 | # | Scenario | Resultaat | Opmerking |
 |---|---|---|---|
 | 1 | Alle routes direct via URL en via het menu; back/forward | ✅ | 20 routes, 13 menu-items |
-| 2 | Alle zichtbare knoppen en links functioneel | ⏳ Bezig | Elke knop vanuit een schone state geklikt; een effect is een URL-wijziging, DOM-wijziging of geopende dialoog/menu |
+| 2 | Alle zichtbare knoppen en links functioneel | ✅ | Elke knop vanuit een schone state geklikt; een effect is een URL-wijziging, DOM-wijziging of geopende dialoog/menu |
 | 3 | Album “Familieweekend” met twee foto's → in Albums → blijft na refresh | ✅ | Ook: een foto via de lichtbak toevoegen staat echt in het album |
 | 4 | Favoriet aan → in Favorieten → uit → weg | ✅ | |
 | 5 | Verhaal bij een foto van oma Nel → in Verhalen → detail → terug; ook bij de foto | ✅ | |
@@ -57,6 +57,7 @@ Aanvullend getest: Schatkamer-fragment koppelen aan een verhaal, familie uitnodi
 5. Lege `src`-attributen (console-waarschuwing).
 6. Lichtbak sprong bij snelle pijltjesdrukken naar de verkeerde foto (verouderde state in de toetsenbordhandler).
 7. Welkomstpaneel lag op mobiel over het menu.
+9. Dode-knoppencheck, eerste run (21 meldingen): 17 jaarknoppen op de tijdlijn scrolden wel, maar de check mat geen scroll; wel kwam daarbij een echte fout aan het licht: het verkeerde jaar bleef gemarkeerd (opgelost). 3 meldingen waren al-actieve filters (“Alles”) en 4 het actieve menu-item. De check telt scrollen nu als effect en slaat actieve filters en links naar de huidige pagina over.
 8. Bij een tussentijdse wijziging herlaadde de dev-server midden in een test; de tests draaien nu tegen een productiebuild.
 
 ## Wat niet (volledig) getest kon worden

@@ -35,15 +35,19 @@ export default function Tijdlijn() {
   const years = groups.map(([y]) => y)
   const [active, setActive] = useState(years[0])
   const refs = useRef<Record<string, HTMLElement | null>>({})
+  const lock = useRef(0)
   useEffect(() => {
-    const io = new IntersectionObserver((entries) => {
-      const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0]
-      if (vis) setActive((vis.target as HTMLElement).dataset.year!)
-    }, { rootMargin: '-140px 0px -60% 0px' })
-    Object.values(refs.current).forEach((el) => el && io.observe(el))
-    return () => io.disconnect()
-  }, [groups])
-  const jump = (y: string) => { setActive(y); refs.current[y]?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+    const onScroll = () => {
+      if (Date.now() < lock.current) return
+      let cur = years[0]
+      for (const y of years) { const el = refs.current[y]; if (el && el.getBoundingClientRect().top <= 170) cur = y }
+      setActive(cur)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [groups]) // eslint-disable-line react-hooks/exhaustive-deps
+  const jump = (y: string) => { setActive(y); lock.current = Date.now() + 1200; refs.current[y]?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
   const storyFor = (y: string) => state.stories.filter((s) => s.date.startsWith(y))
 
   return (
