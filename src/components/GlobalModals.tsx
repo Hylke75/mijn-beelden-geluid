@@ -430,7 +430,7 @@ function AboutModal() {
             'Nalatenschap, verificatie, het nationaal archief en De Schatkamer zijn ontwerpconcepten zonder juridische of technische garantie.',
             'Je acties worden alleen in deze browser bewaard (localStorage) en kun je altijd terugzetten.'].map((t) => <li key={t} className="flex gap-2"><Info size={16} className="text-brand mt-1 shrink-0" />{t}</li>)}
         </ul>
-        <p className="text-meta text-sm">Idee en ontwikkeling: Hylke Thiry &amp; <a href="https://www.noblestreet.eu/" target="_blank" rel="noopener noreferrer" className="link">noblestreet.eu</a></p>
+        <p className="text-meta text-sm">Idee en ontwikkeling: Hylke Thiry &amp; <a href="https://www.noblestreet.eu/" target="_blank" rel="noopener noreferrer" className="link">Noblestreet</a></p>
       </div>
     </Modal>
   )

@@ -301,6 +301,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/hulp" className="hover:text-ink underline-offset-4 hover:underline">Hulp</Link>
           <button className="hover:text-ink underline-offset-4 hover:underline" onClick={() => ui.open({ type: 'reset' })}>Demo opnieuw starten</button>
           <span className="inline-flex items-center gap-1">Interactieve demo · fictieve gegevens <ChevronRight size={14} className="hidden" /></span>
+          <a href="https://www.noblestreet.eu/" target="_blank" rel="noopener noreferrer" className="hover:text-ink underline-offset-4 hover:underline">Idee en ontwikkeling: Hylke Thiry &amp; Noblestreet</a>
         </footer>
       </div>
       <BottomNav onMore={() => setMore(true)} />
